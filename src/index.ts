@@ -1,5 +1,8 @@
+import { error } from 'console';
 import { N } from './N';
 
 const instance = new N();
 
-await instance.login();
+instance.login().catch(e => error(e));
+
+['SIGTERM', 'SIGINT'].forEach(signal => process.on(signal, () => instance.stop()));
