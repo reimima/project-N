@@ -49,8 +49,14 @@ export class N<T extends boolean> extends Client<T> {
         getLogger().level = process.env['NODE_ENV'] ? 'trace' : 'info';
     }
 
-    public override login(): Promise<string> {
+    public override async login(): Promise<string> {
         this.logger.info('Starting...');
+
+        await import('./events/error').then(module => this.on('error', arg => new module.default(this as N<true>).run(arg)));
+
+        await import('./events/ready').then(module => this.on('ready', arg => new module.default(this as N<true>).run(arg)));
+
+        await import('./events/warn').then(module => this.on('warn', arg => new module.default(this as N<true>).run(arg)));
 
         return super.login(this.configs.token);
     }
