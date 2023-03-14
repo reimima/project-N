@@ -10,7 +10,7 @@ export abstract class Command {
     protected readonly logger: Logger;
 
     protected constructor(
-        protected readonly client: N<true>,
+        protected readonly client: N,
         public readonly data: ApplicationCommandData,
     ) {
         this.logger = getLogger(data.name);

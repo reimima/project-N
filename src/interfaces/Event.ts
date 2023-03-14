@@ -10,7 +10,7 @@ export abstract class Event {
     protected readonly logger: Logger;
 
     protected constructor(
-        protected readonly client: N<true>,
+        protected readonly client: N,
         public readonly name: keyof ClientEvents,
     ) {
         this.logger = getLogger(name);
