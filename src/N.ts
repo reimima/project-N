@@ -1,6 +1,5 @@
 import { ActivityType, Client } from 'discord.js';
 import { config } from 'dotenv';
-
 import log4js from 'log4js';
 import { CommandManager } from './manager';
 
@@ -40,7 +39,7 @@ export class N extends Client {
 
     public constructor() {
         super({
-            intents: ['Guilds', 'GuildIntegrations'],
+            intents: ['Guilds', 'GuildIntegrations', 'GuildMembers', 'GuildMessages', 'MessageContent'],
             allowedMentions: { repliedUser: false },
             presence: {
                 status: 'idle',
@@ -67,7 +66,9 @@ export class N extends Client {
 
         await import('./events/warn').then(module => this.on('warn', arg => new module.default(this).run(arg)));
 
-        await this.commandManager.registerAll().catch(e => this.logger.error(e));
+        await Promise.all([
+            this.commandManager.registerAll().catch(e => this.logger.error(e)),
+        ]);
 
         return super.login(this.configs.token);
     }
